@@ -119,9 +119,15 @@ public class LockableResourcesRootAction implements RootAction {
 
 		List<LockableResource> resources = new ArrayList<LockableResource>();
 		resources.add(r);
+		String reservedBy = req.getParameter("reservedBy");
 		String userName = getUserName();
-		if (userName != null)
+		if (userName != null) {
+			String reserveInfo = userName;
+			if (reservedBy != null && !reserveInfo.isEmpty()) {
+				reserveInfo = String.valueOf(userName) + " - " + reservedBy;
+			}
 			LockableResourcesManager.get().reserve(resources, userName);
+		}
 
 		rsp.forwardToPreviousPage(req);
 	}
